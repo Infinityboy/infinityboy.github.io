@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客仅以个人学习记录使用原文链接: https://blog.csdn.net/lzc4869/article/details/79195357  反向代理nginx 反向代理 就是说把跨域的 url 通过本地代理的方式，变成同域的请求，如此来解决跨域问题该配置下 通过http://localhost/html5/路径下的文件去请求http://localhost/request/的相关接口">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx常用代理配置">
+<meta property="og:url" content="http://yoursite.com/2019/06/03/nginx常用代理配置/index.html">
+<meta property="og:site_name" content="太玄经">
+<meta property="og:description" content="本篇博客仅以个人学习记录使用原文链接: https://blog.csdn.net/lzc4869/article/details/79195357  反向代理nginx 反向代理 就是说把跨域的 url 通过本地代理的方式，变成同域的请求，如此来解决跨域问题该配置下 通过http://localhost/html5/路径下的文件去请求http://localhost/request/的相关接口">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-25T02:56:20.800Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx常用代理配置">
+<meta name="twitter:description" content="本篇博客仅以个人学习记录使用原文链接: https://blog.csdn.net/lzc4869/article/details/79195357  反向代理nginx 反向代理 就是说把跨域的 url 通过本地代理的方式，变成同域的请求，如此来解决跨域问题该配置下 通过http://localhost/html5/路径下的文件去请求http://localhost/request/的相关接口">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/03/nginx常用代理配置/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>nginx常用代理配置 | 太玄经</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">太玄经</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/03/nginx常用代理配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几岁老人">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="太玄经">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx常用代理配置
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-06-03 21:02:25" itemprop="dateCreated datePublished" datetime="2019-06-03T21:02:25+08:00">2019-06-03</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="更新于：2020-04-25 10:56:20" itemprop="dateModified" datetime="2020-04-25T10:56:20+08:00">2020-04-25</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/后端/" itemprop="url" rel="index"><span itemprop="name">后端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇博客仅以个人学习记录使用<br>原文链接: <a href="https://blog.csdn.net/lzc4869/article/details/79195357" target="_blank" rel="noopener">https://blog.csdn.net/lzc4869/article/details/79195357</a></p>
+</blockquote>
+<h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>nginx 反向代理 就是说把跨域的 url 通过本地代理的方式，变成同域的请求，如此来解决跨域问题<br>该配置下 通过<a href="http://localhost/html5/路径下的文件去请求http://localhost/request/的相关接口就相当于去请求http://localhost:8888/login/相关的接口" target="_blank" rel="noopener">http://localhost/html5/路径下的文件去请求http://localhost/request/的相关接口就相当于去请求http://localhost:8888/login/相关的接口</a></p>
+<h3 id="最简反向代理配置"><a href="#最简反向代理配置" class="headerlink" title="最简反向代理配置"></a>最简反向代理配置</h3><p>在 http 节点下，使用 upstream 配置服务地址，使用 server 的 location 配置代理映射。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">upstream my_server &#123;</span><br><span class="line">    server 10.0.0.2:8080;</span><br><span class="line">    keepalive 2000;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  10.0.0.1;</span><br><span class="line">    client_max_body_size 1024M;</span><br><span class="line"></span><br><span class="line">    location /my/ &#123;</span><br><span class="line">        proxy_pass http://my_server/;</span><br><span class="line">        proxy_set_header Host $host:$server_port;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">通过该配置，访问nginx地址http://10.0.0.1:80/my的请求会被转发到my_server服务地址http://10.0.0.2:8080/。</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的是，如果按照如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">upstream my_server &#123;</span><br><span class="line">    server 10.0.0.2:8080;</span><br><span class="line">    keepalive 2000;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  10.0.0.1;</span><br><span class="line">    client_max_body_size 1024M;</span><br><span class="line"></span><br><span class="line">    location /my/ &#123;</span><br><span class="line">        proxy_pass http://my_server;</span><br><span class="line">        proxy_set_header Host $host:$server_port;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">那么，访问nginx地址http://10.0.0.1:80/my的请求会被转发到my_server服务地址http://10.0.0.2:8080/my。这是因为proxy_pass参数中如果不包含url的路径，则会将location的pattern识别的路径作为绝对路径。</span><br></pre></td></tr></table></figure>
+
+<h3 id="重定向报文代理"><a href="#重定向报文代理" class="headerlink" title="重定向报文代理"></a>重定向报文代理</h3><p>即便配置了 nginx 代理，当服务返回重定向报文时（http code 为 301 或 302），会将重定向的目标 url 地址放入 http response 报文的 header 的 location 字段内。用户浏览器收到重定向报文时，会解析出该字段并作跳转。此时新的请求报文将直接发送给服务地址，而非 nginx 地址。为了能让 nginx 拦截此类请求，必须修改重定向报文的 location 信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /my/ &#123;</span><br><span class="line">    proxy_pass http://my_server;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    proxy_redirect / /my/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 proxy_redirect 可以修改重定向报文的 location 字段，例子中会将所有的根路径下的 url 代理到 nginx 的/my/路径下返回给用户。比如服务返回的重定向报文的 location 原始值为/login，那么经过 nginx 代理后，用户收到的报文的 location 字段为/my/login。此时，浏览器将会跳转到 nginx 的/my/login 地址进行访问。</p>
+<p>需要注意的是，服务返回的重定向报文的 location 字段有时会填写绝对路径（包含服务的 ip/域名和端口），有时候会填写相对路径，此时需要根据实际情况进行甄别</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /my/ &#123;</span><br><span class="line">    proxy_pass http://my_server;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    proxy_redirect http://my_server/ http://$host:$server_port/my/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述配置便是将 my_server 服务的根路径下的所有路径代理到 nginx 地址的/my/路径下。当 nginx 配置只有一个 server 时，<a href="http://host:server_port前缀可以省略。" target="_blank" rel="noopener">http://host:server_port前缀可以省略。</a></p>
+<h3 id="报文数据替换"><a href="#报文数据替换" class="headerlink" title="报文数据替换"></a>报文数据替换</h3><p>使用 nginx 代理最牛（dan）逼（sui）的情况就是 http 响应报文内写死了服务地址或 web 绝对路径。写死服务地址的情况比较少见，但也偶尔存在。最棘手的是写死了 web 绝对路径，尤其是绝对路径都没有公共前缀。举个例子来说：</p>
+<p>一般的 web 页面会包含如下类似路径：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/public：用于静态页面资源，如js脚本/public/js，样式表/public/css，图片/public/img等</span><br><span class="line">/static：和/public类似</span><br><span class="line">/api：用于后台服务API接口</span><br><span class="line">/login：用于登录验证</span><br></pre></td></tr></table></figure>
+
+<p>对于这样的服务，可能的代理配置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">location /my/ &#123;</span><br><span class="line">    proxy_pass http://my_server/;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    proxy_redirect / /my/;</span><br><span class="line">&#125;</span><br><span class="line">location /login/ &#123;</span><br><span class="line">    proxy_pass http://my_server/public;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line">&#125;</span><br><span class="line">location /public/ &#123;</span><br><span class="line">    proxy_pass http://my_server/public;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line">&#125;</span><br><span class="line">location /api/ &#123;</span><br><span class="line">    proxy_pass http://my_server/api;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于 web 页面或静态资源内写死了类似的绝对路径，那么对于用户来说，通过页面内的链接进行跳转时，都会请求到 nginx 服务对应的路径上。一旦存在另一个服务也包含类似的路径，也需要 nginx 进行代理，那么矛盾就出现了：访问 nginx 的同一个路径下的请求究竟转发给哪一个服务？</p>
+<p>要解决这个问题，必须在用户收到报文前，将报文的数据中包含的绝对路径都添加统一的前缀，如/my/public，/my/api，/my/login，这样 nginx 代理配置则可以简化为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location /my/ &#123;</span><br><span class="line">    proxy_pass http://my_server/;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    proxy_redirect / /my/;</span><br><span class="line">&#125;</span><br><span class="line">location /other/ &#123;</span><br><span class="line">    proxy_pass http://other_server/;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    proxy_redirect / /other/;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>nginx 的 ngx_http_sub_module 模块提供了类似的报文数据替换功能，该模块默认不会安装，需要在编译 nginx 时添加–with-http_sub_module 参数，或者直接下载 nginx 的 rpm 包。</p>
+<p>使用 sub_filter 对数据包进行替换的语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">location /my/ &#123;</span><br><span class="line">    proxy_pass http://my_server/;</span><br><span class="line">    proxy_set_header Host $host:$server_port;</span><br><span class="line"></span><br><span class="line">    sub_filter &apos;href=&quot;/&apos; &apos;href=&quot;/my/&apos;;</span><br><span class="line">    sub_filter &apos;src=&quot;/&apos; &apos;src=&quot;/my/&apos;;</span><br><span class="line">    sub_filter_types text/html;</span><br><span class="line">    sub_filter_once  off;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述配置会将/my/下的所有响应报文内容的 href=”/替换为 href=”/my，以及 src=”/替换为 src=”/my，即为所有的绝对路径添加公共前缀。</p>
+<p>注意，如果需要配置多个 sub_filter，必须保证 nginx 是 1.9.4 版本之上的。</p>
+<h3 id="一个简单的完整示例"><a href="#一个简单的完整示例" class="headerlink" title="一个简单的完整示例"></a>一个简单的完整示例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#user root owner;   #在mac中获取权限时需要将注释去掉</span><br><span class="line">worker_processes  2; #启动进程,通常设置成和cpu的数量相等</span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024; #单个后台worker process进程的最大并发链接数</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types; #设定mime类型,类型由mime.type文件定义</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line">    #sendfile 指令指定 nginx 是否调用 sendfile 函数（zero copy）来输出文件，对于普通应用，</span><br><span class="line">    #必须设为 on,如果用来进行下载等应用磁盘IO重负载应用，可设置为 off，以平衡磁盘与网络I/O处理速度，降低系统的uptime.</span><br><span class="line">    sendfile on;</span><br><span class="line">    keepalive_timeout  65; #连接超时时间</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80; #侦听80端口</span><br><span class="line">        server_name localhost; # 定义使用www.xx.com访问</span><br><span class="line">        charset utf-8;</span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            add_header Cache-Control no-store;</span><br><span class="line">            add_header &apos;Access-Control-Allow-Origin&apos; &apos;*&apos;;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line">        location /request/ &#123;</span><br><span class="line">            root /;</span><br><span class="line">            proxy_set_header  Host $host; #请求主机头字段，否则为服务器名称。</span><br><span class="line">            proxy_headers_hash_max_size 1024; #存放http报文头的哈希表容量上限,默认为512个字符</span><br><span class="line">            proxy_headers_hash_bucket_size 128; #设置头部哈希表大小 默认为64</span><br><span class="line">            proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for ;</span><br><span class="line">            proxy_set_header Accept-Encoding &quot;&quot;;</span><br><span class="line">            proxy_pass http://localhost:8888/login/; #请求替换地址 例如要请求http://localhost:8888/login/ 也就是请求http://localhost/request/</span><br><span class="line">        &#125;</span><br><span class="line">        location ~ ^/html5/ &#123;</span><br><span class="line">            rewrite  /html5(.*)$ $1 break; #该指令根据表达式来重定向URI, 路径中存在/html5/的</span><br><span class="line">            expires -1; #缓存</span><br><span class="line">            root D:\html5; #前端静态文件物理路径 通过http://localhost/html5/来访问D盘html5下的文件夹</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="一个-React-类基于-History-模式路由的单页应用-nginx-配置"><a href="#一个-React-类基于-History-模式路由的单页应用-nginx-配置" class="headerlink" title="一个 React 类基于 History 模式路由的单页应用 nginx 配置"></a>一个 React 类基于 History 模式路由的单页应用 nginx 配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    # gzip config</span><br><span class="line">    gzip on;</span><br><span class="line">    gzip_min_length 1k;</span><br><span class="line">    gzip_comp_level 9;</span><br><span class="line">    gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    gzip_disable &quot;MSIE [1-6]\.&quot;;</span><br><span class="line"></span><br><span class="line">    root /usr/share/nginx/html;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        # 用于配合 browserHistory使用</span><br><span class="line">        try_files $uri $uri/ /index.html;</span><br><span class="line"></span><br><span class="line">        # 如果有资源，建议使用 https + http2，配合按需加载可以获得更好的体验</span><br><span class="line">        # rewrite ^/(.*)$ https://preview.pro.ant.design/$1 permanent;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    //示例模板</span><br><span class="line">    location /api &#123;</span><br><span class="line">        proxy_pass https://ant-design-pro.netlify.com;</span><br><span class="line">        proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header   X-Real-IP         $remote_addr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /api &#123;</span><br><span class="line">        //实际配置中，带有前缀的api请求可能会需要配置rewrite，进行前缀的代理转发，实际应用中还可配置多个</span><br><span class="line">        rewrite ^.+api/?(.*)$ /$1 break;</span><br><span class="line">        proxy_pass http://192.168.50.55:9988;</span><br><span class="line">        proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header   X-Real-IP         $remote_addr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /gis &#123;</span><br><span class="line">        //实际配置中，带有前缀的api请求可能会需要配置rewrite，进行前缀的代理转发，实际应用中还可配置多个</span><br><span class="line">        rewrite ^.+gis/?(.*)$ /$1 break;</span><br><span class="line">        proxy_pass http://192.168.50.55:9988;</span><br><span class="line">        proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header   X-Real-IP         $remote_addr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  # 如果有资源，建议使用 https + http2，配合按需加载可以获得更好的体验</span><br><span class="line">  listen 443 ssl http2 default_server;</span><br><span class="line"></span><br><span class="line">  # 证书的公私钥</span><br><span class="line">  ssl_certificate /path/to/public.crt;</span><br><span class="line">  ssl_certificate_key /path/to/private.key;</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">        # 用于配合 browserHistory使用</span><br><span class="line">        try_files $uri $uri/ /index.html;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  location /api &#123;</span><br><span class="line">      proxy_pass https://ant-design-pro.netlify.com;</span><br><span class="line">      proxy_set_header   X-Forwarded-Proto $scheme;</span><br><span class="line">      proxy_set_header   Host              $http_host;</span><br><span class="line">      proxy_set_header   X-Real-IP         $remote_addr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Nginx/" rel="tag"># Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/03/nginx配置一个图片服务器/" rel="next" title="nginx配置一个图片服务器">
+                <i class="fa fa-chevron-left"></i> nginx配置一个图片服务器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/03/WebGis开发基础/" rel="prev" title="WebGis开发基础">
+                WebGis开发基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几岁老人</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#反向代理"><span class="nav-number">1.</span> <span class="nav-text">反向代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最简反向代理配置"><span class="nav-number">2.</span> <span class="nav-text">最简反向代理配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向报文代理"><span class="nav-number">3.</span> <span class="nav-text">重定向报文代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报文数据替换"><span class="nav-number">4.</span> <span class="nav-text">报文数据替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个简单的完整示例"><span class="nav-number">5.</span> <span class="nav-text">一个简单的完整示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个-React-类基于-History-模式路由的单页应用-nginx-配置"><span class="nav-number">6.</span> <span class="nav-text">一个 React 类基于 History 模式路由的单页应用 nginx 配置</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几岁老人</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by"><a href="https://github.com/infinityboy" class="theme-link" rel="noopener" target="_blank">GitHub</a></div>
+
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<span id="busuanzi_container_site_pv" style="margin-left:10px;">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

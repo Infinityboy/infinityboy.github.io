@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客仅以个人学习记录使用参照开源项目地址：https://juejin.im/entry/5aa09c3351882555602077ca  搭建步骤1.可直接使用 cli 搭建项目工程，然后执行以下命令安装需要用的依赖包 1yarn add postcss-aspect-ratio-mini postcss-px-to-viewport postcss-write-svg postcss-">
+<meta name="keywords" content="vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VUE 移动端适配方案">
+<meta property="og:url" content="http://yoursite.com/2020/02/05/VUE-移动端适配方案/index.html">
+<meta property="og:site_name" content="太玄经">
+<meta property="og:description" content="本篇博客仅以个人学习记录使用参照开源项目地址：https://juejin.im/entry/5aa09c3351882555602077ca  搭建步骤1.可直接使用 cli 搭建项目工程，然后执行以下命令安装需要用的依赖包 1yarn add postcss-aspect-ratio-mini postcss-px-to-viewport postcss-write-svg postcss-">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-26T10:24:20.553Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="VUE 移动端适配方案">
+<meta name="twitter:description" content="本篇博客仅以个人学习记录使用参照开源项目地址：https://juejin.im/entry/5aa09c3351882555602077ca  搭建步骤1.可直接使用 cli 搭建项目工程，然后执行以下命令安装需要用的依赖包 1yarn add postcss-aspect-ratio-mini postcss-px-to-viewport postcss-write-svg postcss-">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2020/02/05/VUE-移动端适配方案/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>VUE 移动端适配方案 | 太玄经</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">太玄经</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/05/VUE-移动端适配方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几岁老人">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="太玄经">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">VUE 移动端适配方案
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2020-02-05 15:08:52" itemprop="dateCreated datePublished" datetime="2020-02-05T15:08:52+08:00">2020-02-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="更新于：2020-02-26 18:24:20" itemprop="dateModified" datetime="2020-02-26T18:24:20+08:00">2020-02-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web前端/" itemprop="url" rel="index"><span itemprop="name">web前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇博客仅以个人学习记录使用<br>参照开源项目地址：<a href="https://juejin.im/entry/5aa09c3351882555602077ca" target="_blank" rel="noopener">https://juejin.im/entry/5aa09c3351882555602077ca</a></p>
+</blockquote>
+<h3 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h3><p>1.可直接使用 cli 搭建项目工程，然后执行以下命令安装需要用的依赖包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add postcss-aspect-ratio-mini postcss-px-to-viewport postcss-write-svg postcss-preset-env postcss-viewport-units cssnano</span><br></pre></td></tr></table></figure>
+
+<p>安装成功后 package.json 文件中就会有这些依赖包</p>
+<p>2.接下来在.postcssrc.js 文件对新安装的 PostCSS 插件进行配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123;</span><br><span class="line">    &quot;plugins&quot;: &#123;</span><br><span class="line">        &quot;postcss-import&quot;: &#123;&#125;,</span><br><span class="line">        &quot;postcss-url&quot;: &#123;&#125;,</span><br><span class="line">        &quot;postcss-aspect-ratio-mini&quot;: &#123;&#125;,</span><br><span class="line">        &quot;postcss-write-svg&quot;: &#123;</span><br><span class="line">            utf8: false</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;postcss-cssnext&quot;: &#123;&#125;,</span><br><span class="line">        &quot;postcss-px-to-viewport&quot;: &#123;</span><br><span class="line">            viewportWidth: 750,     // (Number) The width of the viewport.</span><br><span class="line">            viewportHeight: 1334,    // (Number) The height of the viewport.</span><br><span class="line">            unitPrecision: 3,       // (Number) The decimal numbers to allow the REM units to grow to.</span><br><span class="line">            viewportUnit: &apos;vw&apos;,     // (String) Expected units.</span><br><span class="line">            selectorBlackList: [&apos;.ignore&apos;, &apos;.hairlines&apos;],  // (Array) The selectors to ignore and leave as px.</span><br><span class="line">            minPixelValue: 1,       // (Number) Set the minimum pixel value to replace.</span><br><span class="line">            mediaQuery: false       // (Boolean) Allow px to be converted in media queries.</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;postcss-viewport-units&quot;:&#123;&#125;,</span><br><span class="line">        &quot;cssnano&quot;: &#123;</span><br><span class="line">            preset: &quot;advanced&quot;,</span><br><span class="line">            autoprefixer: false,</span><br><span class="line">            &quot;postcss-zindex&quot;: false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">postcss-px-to-viewport 插件对应配置</span><br><span class="line"></span><br><span class="line">&quot;postcss-px-to-viewport&quot;: &#123;</span><br><span class="line">    viewportWidth: 750,      // 视窗的宽度，对应的是我们设计稿的宽度，一般是750</span><br><span class="line">    viewportHeight: 1334,    // 视窗的高度，根据750设备的宽度来指定，一般指定1334，也可以不配置</span><br><span class="line">    unitPrecision: 3,        // 指定`px`转换为视窗单位值的小数位数（很多时候无法整除）</span><br><span class="line">    viewportUnit: &apos;vw&apos;,      // 指定需要转换成的视窗单位，建议使用vw</span><br><span class="line">    selectorBlackList: [&apos;.ignore&apos;, &apos;.hairlines&apos;],  // 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名</span><br><span class="line">    minPixelValue: 1,       // 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值</span><br><span class="line">    mediaQuery: false       // 允许在媒体查询中转换`px`</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.到了这一步已经完成了大部分，但是还是会有一些兼容性的问题，但是可借助 viewport 的 polyfill 解决 viewport 的兼容问题，将以下代码引入到 vue 中的 index.html 中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">引入polyfill</span><br><span class="line">&lt;script src=&quot;//g.alicdn.com/fdilab/lib3rd/viewport-units-buggyfill/0.6.2/??viewport-units-buggyfill.hacks.min.js,viewport-units-buggyfill.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">调用polyfill</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    window.onload = function () &#123;</span><br><span class="line">        window.viewportUnitsBuggyfill.init(&#123;</span><br><span class="line">            hacks: window.viewportUnitsBuggyfillHacks</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    var winDPI = window.devicePixelRatio;</span><br><span class="line">    var uAgent = window.navigator.userAgent;</span><br><span class="line">    var screenHeight = window.screen.height;</span><br><span class="line">    var screenWidth = window.screen.width;</span><br><span class="line">    var winWidth = window.innerWidth;</span><br><span class="line">    var winHeight = window.innerHeight;</span><br><span class="line"></span><br><span class="line">    //测试设备基本属性</span><br><span class="line">    alert(</span><br><span class="line">        &quot;Windows DPI:&quot; + winDPI +</span><br><span class="line">        &quot;;\ruAgent:&quot; + uAgent +</span><br><span class="line">        &quot;;\rScreen Width:&quot; + screenWidth +</span><br><span class="line">        &quot;;\rScreen Height:&quot; + screenHeight +</span><br><span class="line">        &quot;;\rWindow Width:&quot; + winWidth +</span><br><span class="line">        &quot;;\rWindow Height:&quot; + winHeight</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>具体的使用。在你的 CSS 中，只要使用到了 viewport 的单位（vw、vh、vmin 或 vmax ）地方，需要在样式中添加 content：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.my-viewport-units-using-thingie &#123;</span><br><span class="line">    width: 50vmin;</span><br><span class="line">    height: 50vmax;</span><br><span class="line">    top: calc(50vh - 100px);</span><br><span class="line">    left: calc(50vw - 100px);</span><br><span class="line"></span><br><span class="line">    /* hack to engage viewport-units-buggyfill */</span><br><span class="line">    content: &apos;viewport-units-buggyfill; width: 50vmin; height: 50vmax; top: calc(50vh - 100px); left: calc(50vw - 100px);&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这可能会令你感到恶心，而且我们不可能每次写 vw 都去人肉的计算。特别是在我们的这个场景中，咱们使用了 postcss-px-to-viewport 这个插件来转换 vw，更无法让我们人肉的去添加 content 内容。<br>这个时候就需要前面提到的 postcss-viewport-units 插件。这个插件将让你无需关注 content 的内容，插件会自动帮你处理。转换后的代码可以在浏览器中查看到类似 content: ‘viewport-units-buggyfill;这样的标识</p>
+<p>4.Viewport Units Buggyfill 还提供了其他的功能。详细的这里不阐述了。但是 content 也会引起一定的副作用。比如 img 和伪元素::before(:before)或::after（:after）。在 img 中 content 会引起部分浏览器下，图片不会显示。这个时候需要全局添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">img &#123;</span><br><span class="line">    content: normal !important;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而对于::after 之类的，就算是里面使用了 vw 单位，Viewport Units Buggyfill 对其并不会起作用。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 编译前</span><br><span class="line">.after &#123;</span><br><span class="line">    content: &apos;after content&apos;;</span><br><span class="line">    display: block;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 20px;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 编译后</span><br><span class="line">.after[data-v-469af010] &#123;</span><br><span class="line">    content: &quot;after content&quot;;</span><br><span class="line">    display: block;</span><br><span class="line">    width: 13.333vw;</span><br><span class="line">    height: 2.667vw;</span><br><span class="line">    background: green;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="相关插件介绍"><a href="#相关插件介绍" class="headerlink" title="相关插件介绍"></a>相关插件介绍</h3><h4 id="postcss-import"><a href="#postcss-import" class="headerlink" title="postcss-import"></a>postcss-import</h4><p>postcss-import 主要功有是解决@import 引入路径问题。使用这个插件，可以让你很轻易的使用本地文件、node_modules 或者 web_modules 的文件。这个插件配合 postcss-url 让你引入文件变得更轻松</p>
+<h4 id="postcss-url"><a href="#postcss-url" class="headerlink" title="postcss-url"></a>postcss-url</h4><p>该插件主要用来处理文件，比如图片文件、字体文件等引用路径的处理。</p>
+<p>在 Vue 项目中，vue-loader 已具有类似的功能，只需要配置中将 vue-loader 配置进去</p>
+<h4 id="autoprefixer"><a href="#autoprefixer" class="headerlink" title="autoprefixer"></a>autoprefixer</h4><p>autoprefixer 插件是用来自动处理浏览器前缀的一个插件。如果你配置了 postcss-cssnext，其中就已具备了 autoprefixer 的功能。在配置的时候，未显示的配置相关参数的话，表示使用的是 Browserslist 指定的列表参数，你也可以像这样来指定 last 2 versions 或者 &gt; 5%。</p>
+<p>如此一来，你在编码时不再需要考虑任何浏览器前缀的问题，可以专心撸码。这也是 PostCSS 最常用的一个插件之一。</p>
+<h4 id="其他插件"><a href="#其他插件" class="headerlink" title="其他插件"></a>其他插件</h4><p>Vue-cli 默认配置了上述三个 PostCSS 插件，但我们要完成 vw 的布局兼容方案，或者说让我们能更专心的撸码，还需要配置下面的几个 PostCSS 插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">postcss-aspect-ratio-mini</span><br><span class="line">postcss-px-to-viewport</span><br><span class="line">postcss-write-svg</span><br><span class="line">postcss-cssnext  (这个插件已经被postcss-preset-env所替代)</span><br><span class="line">cssnano</span><br><span class="line">postcss-viewport-units</span><br></pre></td></tr></table></figure>
+
+<h4 id="postcss-preset-env-postcss-cssnext-废弃"><a href="#postcss-preset-env-postcss-cssnext-废弃" class="headerlink" title="postcss-preset-env/postcss-cssnext(废弃)"></a>postcss-preset-env/postcss-cssnext(废弃)</h4><p>该插件可以让我们使用 CSS 未来的特性，其会对这些特性做相关的兼容性处理</p>
+<h4 id="cssnano"><a href="#cssnano" class="headerlink" title="cssnano"></a>cssnano</h4><p>cssnano 主要用来压缩和清理 CSS 代码。在 Webpack 中，cssnano 和 css-loader 捆绑在一起，所以不需要自己加载它。不过你也可以使用 postcss-loader 显式的使用 cssnano</p>
+<p>在 cssnano 的配置中，使用了 preset: “advanced”，所以我们需要另外安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add cssnano-preset-advanced</span><br></pre></td></tr></table></figure>
+
+<p>cssnano 集成了一些其他的 PostCSS 插件，如果你想禁用 cssnano 中的某个插件的时候，可以像下面这样操作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;cssnano&quot;: &#123;</span><br><span class="line">    autoprefixer: false,</span><br><span class="line">    &quot;postcss-zindex&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码把 autoprefixer 和 postcss-zindex 禁掉了。前者是有重复调用，后者是一个讨厌的东东。只要启用了这个插件，z-index 的值就会重置为 1。这是一个天坑，千万记得将 postcss-zindex 设置为 false。</p>
+<h4 id="postcss-px-to-viewport"><a href="#postcss-px-to-viewport" class="headerlink" title="postcss-px-to-viewport"></a>postcss-px-to-viewport</h4><p>postcss-px-to-viewport 插件主要用来把 px 单位转换为 vw、vh、vmin 或者 vmax 这样的视窗单位，也是 vw 适配方案的核心插件之一。</p>
+<p>在配置中需要配置相关的几个关键参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&quot;postcss-px-to-viewport&quot;: &#123;</span><br><span class="line">    viewportWidth: 750,      // 视窗的宽度，对应的是我们设计稿的宽度，一般是750</span><br><span class="line">    viewportHeight: 1334,    // 视窗的高度，根据750设备的宽度来指定，一般指定1334，也可以不配置</span><br><span class="line">    unitPrecision: 3,        // 指定`px`转换为视窗单位值的小数位数（很多时候无法整除）</span><br><span class="line">    viewportUnit: &apos;vw&apos;,      // 指定需要转换成的视窗单位，建议使用vw</span><br><span class="line">    selectorBlackList: [&apos;.ignore&apos;, &apos;.hairlines&apos;],  // 指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名</span><br><span class="line">    minPixelValue: 1,       // 小于或等于`1px`不转换为视窗单位，你也可以设置为你想要的值</span><br><span class="line">    mediaQuery: false       // 允许在媒体查询中转换`px`</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目前出视觉设计稿，我们都是使用 750px 宽度的，那么 100vw = 750px，即 1vw = 7.5px。那么我们可以根据设计图上的 px 值直接转换成对应的 vw 值。在实际撸码过程，不需要进行任何的计算，直接在代码中写 px，比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.test &#123;</span><br><span class="line">    border: .5px solid black;</span><br><span class="line">    border-bottom-width: 4px;</span><br><span class="line">    font-size: 14px;</span><br><span class="line">    line-height: 20px;</span><br><span class="line">    position: relative;</span><br><span class="line">&#125;</span><br><span class="line">[w-188-246] &#123;</span><br><span class="line">    width: 188px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译出来的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">.test &#123;</span><br><span class="line">    border: .5px solid #000;</span><br><span class="line">    border-bottom-width: .533vw;</span><br><span class="line">    font-size: 1.867vw;</span><br><span class="line">    line-height: 2.667vw;</span><br><span class="line">    position: relative;</span><br><span class="line">&#125;</span><br><span class="line">[w-188-246] &#123;</span><br><span class="line">    width: 25.067vw;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在不想要把 px 转换为 vw 的时候，首先在对应的元素（html）中添加配置中指定的类名.ignore 或.hairlines(.hairlines 一般用于设置 border-width:0.5px 的元素中)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;box ignore&quot;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>写 CSS 的时候：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.ignore &#123;</span><br><span class="line">    margin: 10px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">.box &#123;</span><br><span class="line">    width: 180px;</span><br><span class="line">    height: 300px;</span><br><span class="line">&#125;</span><br><span class="line">.hairlines &#123;</span><br><span class="line">    border-bottom: 0.5px solid red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译出来的 CSS:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.box &#123;</span><br><span class="line">    width: 24vw;</span><br><span class="line">    height: 40vw;</span><br><span class="line">&#125;</span><br><span class="line">.ignore &#123;</span><br><span class="line">    margin: 10px; /*.box元素中带有.ignore类名，在这个类名写的`px`不会被转换*/</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">.hairlines &#123;</span><br><span class="line">    border-bottom: 0.5px solid red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面解决了 px 到 vw 的转换计算。那么在哪些地方可以使用 vw 来适配我们的页面。根据相关的测试：</p>
+<p>容器适配，可以使用 vw<br>文本的适配，可以使用 vw<br>大于 1px 的边框、圆角、阴影都可以使用 vw<br>内距和外距，可以使用 vw</p>
+<h4 id="postcss-aspect-ratio-mini"><a href="#postcss-aspect-ratio-mini" class="headerlink" title="postcss-aspect-ratio-mini"></a>postcss-aspect-ratio-mini</h4><p>postcss-aspect-ratio-mini 主要用来处理元素容器宽高比。在实际使用的时候，具有一个默认的结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div aspectratio&gt;</span><br><span class="line">    &lt;div aspectratio-content&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在实际使用的时候，你可以把自定义属性 aspectratio 和 aspectratio-content 换成相应的类名，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;aspectratio&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;aspectratio-content&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>也可以用自定义属性，它和类名所起的作用是同等的。结构定义之后，需要在你的样式文件中添加一个统一的宽度比默认属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[aspectratio] &#123;</span><br><span class="line">    position: relative;</span><br><span class="line">&#125;</span><br><span class="line">[aspectratio]::before &#123;</span><br><span class="line">    content: &apos;&apos;;</span><br><span class="line">    display: block;</span><br><span class="line">    width: 1px;</span><br><span class="line">    margin-left: -1px;</span><br><span class="line">    height: 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[aspectratio-content] &#123;</span><br><span class="line">    position: absolute;</span><br><span class="line">    top: 0;</span><br><span class="line">    left: 0;</span><br><span class="line">    right: 0;</span><br><span class="line">    bottom: 0;</span><br><span class="line">    width: 100%;</span><br><span class="line">    height: 100%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们想要做一个 188:246（188 是容器宽度，246 是容器高度）这样的比例容器，只需要这样使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[w-188-246] &#123;</span><br><span class="line">    aspect-ratio: &apos;188:246&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有一点需要特别注意：aspect-ratio 属性不能和其他属性写在一起，否则编译出来的属性只会留下 aspect-ratio 的值，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div aspectratio w-188-246 class=&quot;color&quot;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>编译前的 CSS 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[w-188-246] &#123;</span><br><span class="line">    width: 188px;</span><br><span class="line">    background-color: red;</span><br><span class="line">    aspect-ratio: &apos;188:246&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译之后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[w-188-246]:before &#123;</span><br><span class="line">    padding-top: 130.85106382978725%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要是因为在插件中做了相应的处理，不在每次调用 aspect-ratio 时，生成前面指定的默认样式代码，这样代码没那么冗余。所以在使用的时候，需要把 width 和 background-color 分开来写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[w-188-246] &#123;</span><br><span class="line">    width: 188px;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">[w-188-246] &#123;</span><br><span class="line">    aspect-ratio: &apos;188:246&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个时候，编译出来的 CSS 就正常了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[w-188-246] &#123;</span><br><span class="line">    width: 25.067vw;</span><br><span class="line">    background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">[w-188-246]:before &#123;</span><br><span class="line">    padding-top: 130.85106382978725%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="postcss-write-svg"><a href="#postcss-write-svg" class="headerlink" title="postcss-write-svg"></a>postcss-write-svg</h4><p>postcss-write-svg 插件主要用来处理移动端 1px 的解决方案。该插件主要使用的是 border-image 和 background 来做 1px 的相关处理。比如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@svg 1px-border &#123;</span><br><span class="line">    height: 2px;</span><br><span class="line">    @rect &#123;</span><br><span class="line">        fill: var(--color, black);</span><br><span class="line">        width: 100%;</span><br><span class="line">        height: 50%;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.example &#123;</span><br><span class="line">    border: 1px solid transparent;</span><br><span class="line">    border-image: svg(1px-border param(--color #00b1ff)) 2 2 stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译出来的 CSS:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.example &#123;</span><br><span class="line">    border: 1px solid transparent;</span><br><span class="line">    border-image: url(&quot;data:image/svg+xml;charset=utf-8,%3Csvg xmlns=&apos;http://www.w3.org/2000/svg&apos; height=&apos;2px&apos;%3E%3Crect fill=&apos;%2300b1ff&apos; width=&apos;100%25&apos; height=&apos;50%25&apos;/%3E%3C/svg%3E&quot;) 2 2 stretch;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面演示的是使用 border-image 方式，除此之外还可以使用 background-image 来实现。比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@svg square &#123;</span><br><span class="line">    @rect &#123;</span><br><span class="line">        fill: var(--color, black);</span><br><span class="line">        width: 100%;</span><br><span class="line">        height: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#example &#123;</span><br><span class="line">    background: white svg(square param(--color #00b1ff));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译出来就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#example &#123;</span><br><span class="line">    background: white url(&quot;data:image/svg+xml;charset=utf-8,%3Csvg xmlns=&apos;http://www.w3.org/2000/svg&apos;%3E%3Crect fill=&apos;%2300b1ff&apos; width=&apos;100%25&apos; height=&apos;100%25&apos;/%3E%3C/svg%3E&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">特别声明：由于有一些低端机对border-image支持度不够友好，个人建议你使用background-image的这个方案。</span><br></pre></td></tr></table></figure>
+
+<h4 id="postcss-viewport-units"><a href="#postcss-viewport-units" class="headerlink" title="postcss-viewport-units"></a>postcss-viewport-units</h4><p>postcss-viewport-units 插件主要是给 CSS 的属性添加 content 的属性，配合 viewport-units-buggyfill 库给 vw、vh、vmin 和 vmax 做适配的操作。</p>
+<p>这是实现 vw 布局必不可少的一个插件，因为少了这个插件，这将是一件痛苦的事情。后面你就清楚。</p>
+<h3 id="适用情况"><a href="#适用情况" class="headerlink" title="适用情况"></a>适用情况</h3><p>上面解决了 px 到 vw 的转换计算。那么在哪些地方可以使用 vw 来适配我们的页面。根据相关的测试：</p>
+<p>容器适配，可以使用 vw<br>文本的适配，可以使用 vw<br>大于 1px 的边框、圆角、阴影都可以使用 vw<br>内距和外距，可以使用 vw</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/14/ES6技巧/" rel="next" title="ES6技巧">
+                <i class="fa fa-chevron-left"></i> ES6技巧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/26/hello-world/" rel="prev" title="Hello World hello">
+                Hello World hello <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几岁老人</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建步骤"><span class="nav-number">1.</span> <span class="nav-text">搭建步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关插件介绍"><span class="nav-number">2.</span> <span class="nav-text">相关插件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-import"><span class="nav-number">2.1.</span> <span class="nav-text">postcss-import</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-url"><span class="nav-number">2.2.</span> <span class="nav-text">postcss-url</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#autoprefixer"><span class="nav-number">2.3.</span> <span class="nav-text">autoprefixer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他插件"><span class="nav-number">2.4.</span> <span class="nav-text">其他插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-preset-env-postcss-cssnext-废弃"><span class="nav-number">2.5.</span> <span class="nav-text">postcss-preset-env/postcss-cssnext(废弃)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cssnano"><span class="nav-number">2.6.</span> <span class="nav-text">cssnano</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-px-to-viewport"><span class="nav-number">2.7.</span> <span class="nav-text">postcss-px-to-viewport</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-aspect-ratio-mini"><span class="nav-number">2.8.</span> <span class="nav-text">postcss-aspect-ratio-mini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-write-svg"><span class="nav-number">2.9.</span> <span class="nav-text">postcss-write-svg</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#postcss-viewport-units"><span class="nav-number">2.10.</span> <span class="nav-text">postcss-viewport-units</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适用情况"><span class="nav-number">3.</span> <span class="nav-text">适用情况</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几岁老人</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by"><a href="https://github.com/infinityboy" class="theme-link" rel="noopener" target="_blank">GitHub</a></div>
+
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<span id="busuanzi_container_site_pv" style="margin-left:10px;">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

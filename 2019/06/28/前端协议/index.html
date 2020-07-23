@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本篇博客仅以个人学习记录使用  HTTP协议概述（HTTP协议为应答模式协议）HTTP协议是WWW服务器和用户请求代理（例如浏览器等）之间通过应答请求模式传输超文本（例如HTML文件、JavaScript文件、CSS文件、图片甚至服务器接口数据等）内容的一种协议，协议的详细规范序号为RFC2616。 浏览器（用户请求代理）向服务器发送请求时头部中包含请求的方法GET、URL、协议版本号、请求头域">
+<meta name="keywords" content="协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端协议">
+<meta property="og:url" content="http://yoursite.com/2019/06/28/前端协议/index.html">
+<meta property="og:site_name" content="太玄经">
+<meta property="og:description" content="本篇博客仅以个人学习记录使用  HTTP协议概述（HTTP协议为应答模式协议）HTTP协议是WWW服务器和用户请求代理（例如浏览器等）之间通过应答请求模式传输超文本（例如HTML文件、JavaScript文件、CSS文件、图片甚至服务器接口数据等）内容的一种协议，协议的详细规范序号为RFC2616。 浏览器（用户请求代理）向服务器发送请求时头部中包含请求的方法GET、URL、协议版本号、请求头域">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-26T10:24:20.558Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端协议">
+<meta name="twitter:description" content="本篇博客仅以个人学习记录使用  HTTP协议概述（HTTP协议为应答模式协议）HTTP协议是WWW服务器和用户请求代理（例如浏览器等）之间通过应答请求模式传输超文本（例如HTML文件、JavaScript文件、CSS文件、图片甚至服务器接口数据等）内容的一种协议，协议的详细规范序号为RFC2616。 浏览器（用户请求代理）向服务器发送请求时头部中包含请求的方法GET、URL、协议版本号、请求头域">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/28/前端协议/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>前端协议 | 太玄经</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">太玄经</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/28/前端协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="几岁老人">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="太玄经">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端协议
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-06-28 08:43:37" itemprop="dateCreated datePublished" datetime="2019-06-28T08:43:37+08:00">2019-06-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="更新于：2020-02-26 18:24:20" itemprop="dateModified" datetime="2020-02-26T18:24:20+08:00">2020-02-26</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/web前端/" itemprop="url" rel="index"><span itemprop="name">web前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇博客仅以个人学习记录使用</p>
+</blockquote>
+<h4 id="HTTP协议概述（HTTP协议为应答模式协议）"><a href="#HTTP协议概述（HTTP协议为应答模式协议）" class="headerlink" title="HTTP协议概述（HTTP协议为应答模式协议）"></a>HTTP协议概述（HTTP协议为应答模式协议）</h4><p>HTTP协议是WWW服务器和用户请求代理（例如浏览器等）之间通过应答请求模式传输超文本（例如HTML文件、JavaScript文件、CSS文件、图片甚至服务器接口数据等）内容的一种协议，协议的详细规范序号为RFC2616。</p>
+<p>浏览器（用户请求代理）向服务器发送请求时头部中包含请求的方法GET、URL、协议版本号、请求头域字段（如请求接收类型Accept）、缓存控制Cache-control、浏览器Cookie和user-agent信息等，同时也可能会带上请求的正文内容。服务器接收请求处理后也是以一段响应报文作为返回，响应的内容包括HTTP消息响应的协议版本1.1/2、返回码304及返回描述Not Modified、缓存控制信息Cache-control以及正文的HTML内容等，当然如果返回码为304时请求响应返回的正文为空，浏览器将从本地缓存中读取文件。浏览器接收到服务器的返回后会进行解析，同时进行相应的操作，例如将服务器返回正文中的HTML内容装载至浏览器进行解析渲染，或是将服务器返回的JSON字符串解析成前端可用的JSON对象等。</p>
+<p>通常一个完整的 HTTP报文由头部、空行、正文三部分组成。空行用于区分报文头部和报文正文，由一个回车符和一个行符组成。请求头通常由请求类型、请求URL、协议版本和扩展内容组成；请求头中还包含其他请求头部域信息，如Accept、Cookie、Cache-Control、Host等；请求正文可以携带浏览器端请求的内容，如POST、PUT请求的表单内容。响应返回报文的格式与此类似，响应报文头部由状态码，状态描述、协议版本、扩展内容组成；响应头包含响应头部域信息，如Date、Contont-Type、Cache-Control、Expires等；服务器返回给浏览器的信息可以放在报文正文部分。</p>
+<h5 id="HTTP1-1"><a href="#HTTP1-1" class="headerlink" title="HTTP1.1"></a>HTTP1.1</h5><h6 id="长连接"><a href="#长连接" class="headerlink" title="长连接"></a>长连接</h6><p>HTTP1.1的长连接机制是通过请求头中keep-alive头域信息来控制的。HTTP1.0默认请求的服务器返回是没有keep-alive的，但在HTTP1.0中，如果要建立长连接，也可以在请求消息中包含Connection：keep-alive头域信息，如果服务器能识别这条连接得到的头域信息，则会在响应消息头域中也包含一个Connection：keep-alive返回，表示后面的文化请求可以复用之前得连接传输。但是在HTTP1.1协议中，任何HTTP请求的报文头部域都会默认包含<br>keep-alive。keep-alive的控制可以让客户端到服务器端之间的连接在一段时间内持续有效，当一个请求文件的传输连接建立以后，在服务器保持该连接的这段时间内，其他文件请求可以复用这个已经建立好的连接，而不用像HTTP1.0那样重新握手建立连接，这样就有效将建立和关闭连接的完网络开销平均到多个文件的请求上。但是需要注意的是，长连接的请求机制并不会节省传输内容的网络开销。</p>
+<h6 id="协议扩展切换"><a href="#协议扩展切换" class="headerlink" title="协议扩展切换"></a>协议扩展切换</h6><p>协议扩展切换是指，HTTP1.1协议支持在请求头部域消息中包含Upgrade头并让客户端通过头部标识令服务器知道它能够支持其他备用通信协议的一种<br>机制，服务器根据客户端请求的其他协议进行切换，切换后使用备用协议与客户端进行通信。例如WebSocket协议就是典型的应用，WebSocket协议通信是通过HTTP的方式建立的，通信连接建立完成后通知服务器切换到WebSocket协议来完成后面的数据通信。</p>
+<p>WebSocket协议的连接建立过程：浏览器（假设用户使用的浏览器支持WebSocket）向服务器发送请求，并在消息头中添加Connection：Upgrade和Upgrade：websocket告诉服务器后面需要进行协议切换，切换成为WebSocket协议进行通信，如果服务端支持WebSocket服务并允许该客户端来连接，则可以在响应报文头中返回Upgrade和Connection消息头域，同意浏览器使用WebSocket来连接，同时返回的状态码为101表示请求还需要完成协议的切换</p>
+<h6 id="缓存控制"><a href="#缓存控制" class="headerlink" title="缓存控制"></a>缓存控制</h6><p>在HTTP1.1版本之前，浏览器缓存主要是通过对HTTP1.0的Expires头部控制来实现的，我们知道Expires只能根据绝对时间来刷新缓存内容，HTTP1.1增加了Cache-Control头域，可以支持max-age用来表示相对过期时间，另外请求服务器时也可以根据Etag和Last-Modified来判断是否从浏览器端缓存中加载文件，此时缓存的控制和判断将决定服务器的响应报文中头部内容的状态码是200还是304.下面来描述一下浏览器发送HTTP请求时进行缓存</p>
+<p>读取判断的流程：</p>
+<p>1.浏览器会先查询Cache-Control（这里用Expires判断也是可以的，但是Expires一般设置的是绝对过期时间，在HTTP1.1之前较为通用，Cache-Control设置的是相对过期时间，HTTP1.1后推荐使用Cache-Control来控制，如果两者都设置了，则只有Cache-Control的设置生效）来判断内容是否过期，如果未过期，则直接读取浏览器端缓存文件，不发送HTTP请求，否则进入下一步。</p>
+<p>2.在浏览器端判断上次文件返回头中是否含有Etag信息，有则带上If-None-Match字段信息发送请求给服务器，服务端判断Etag未修改则返回304，如果修改则返回200，否则进入下一步。</p>
+<p>3.在浏览器端判断上次文件返回头中是否含有Last-Modified信息，有则带上If-Modified-Since字段信息发送请求，服务端判断Last-Modified失效则返回200，有效则返回304。</p>
+<p>4.如果Etag和Last-Modified都不存在，则直接向服务器请求内容。</p>
+<p>以上步骤就是Cache-Control、Etag和Last-Modified控制请求缓存的主要过程。</p>
+<h6 id="部分内容传输优化"><a href="#部分内容传输优化" class="headerlink" title="部分内容传输优化"></a>部分内容传输优化</h6><p>部分内容传输优化是指HTTP可以支持超文本文件的部分传输，例如，他允许请求一个文件的起始位置和一个偏移长度来进行文件内容的部分传输。</p>
+<p>另外HTTP1.1请求允许携带一些数据参数信息一起发送到服务器，请求时的数据信息可以放在请求头（例如，GET、DELETE方法请求时）或正文（例如，POST、PUT方法请求时）中。HTTP请求在消息的正文中除了可以携带文本内容，也可以传输二进制数据，例如表单中使用formData提交上传文件时携带的就是二进制数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">HTTP报文的头部域信息内容其实有很多，每个头部域字段的控制都具有自己的逻辑和判断机制，以下是常见的一些头部域字段的设置。</span><br><span class="line"></span><br><span class="line">1. Accept：告诉Web服务器自己能接收什么媒体类型</span><br><span class="line">*/*表示能接收任何类型，type/*表示接收该类型下的所有子类型，一般格式为type/sub-type，多个类型使用q参数分割，</span><br><span class="line">q的值代表quality请求质量，反映了用户对这类媒体类型的偏好程度，例如Acccept：text/plain; q=0.5,text/html,text/x-dvi;q=0.8,text/x-c</span><br><span class="line"></span><br><span class="line">2.Accept-Charset：浏览器接收内容的字符集，通常是utf-8</span><br><span class="line"></span><br><span class="line">3.Accept-Encoding：浏览器接收内容的编码方法，例如指定是否支持压缩，若支持压缩的话支持什么压缩方法，具体如Accept-Encoding：gzip,deflate,sdch</span><br><span class="line"></span><br><span class="line">4.Accept-Language: 浏览器接收内容的语言。语言跟字符集是有区别的，例如中文是语言，中文有多种字符集，big5、关闭312、gbk等。该参数也可以设置多个，如Accept-Language：zh-CN，zh;q=0.8.</span><br><span class="line"></span><br><span class="line">5.Accept-Ranges: Web服务器表明自己是否接受获取某个实体的一部分（比如文件的一部分）请求，这里主要用于部分文件传输，实际上我们用的比较少。bytes表示接受传输多大长度内容，none表示不接受。</span><br><span class="line"></span><br><span class="line">6.Age；一般当服务器用自己缓存的实体去响应请求时，可以用该头部表明实体从产生到现在经过了多长时间，如Age：3600.、</span><br><span class="line"></span><br><span class="line">7.Allow：该参数头部可以设置服务端支持接收哪些可用的HTTP请求方法，例如GET、POST、PUT，如果不支持，则会返回405（Method Not Allowed）</span><br><span class="line"></span><br><span class="line">8.Authorization: 当客户端接收到来自Web服务器的WWW-Authenticate响应时，后面可以用该头部来携带自己的身份验证信息给Web服务器直接进行认证</span><br><span class="line"></span><br><span class="line">9.Cache-Control：用来声明服务器端缓存控制的指令。包括请求设置指令和响应请求指令。</span><br><span class="line"></span><br><span class="line">请求控制指令如下：</span><br><span class="line"></span><br><span class="line">no-cache： 不使用缓存实体，要求从Web服务器去请求内容。</span><br><span class="line"></span><br><span class="line">max-age：只接受Age值小于max-age值的内容，即没有过期的请求对象。</span><br><span class="line"></span><br><span class="line">max-stale：可以接受过去的对象，但是过期时间必须小于max-stale值。</span><br><span class="line"></span><br><span class="line">响应控制指令如下：</span><br><span class="line"></span><br><span class="line">public：可以用Cache中内容回应任何用户。</span><br><span class="line"></span><br><span class="line">private：只能用缓存内容回应先前请求该内容的具体用户。</span><br><span class="line"></span><br><span class="line">no-cache：可以设置哪些内容不被缓存。</span><br><span class="line"></span><br><span class="line">max-age：设置响应中包含对象的过期时间</span><br><span class="line"></span><br><span class="line">ALL：no-store不允许缓存。</span><br><span class="line"></span><br><span class="line">10.Connection：在请求头中，close告诉Web服务器或者代理服务器，在完成本次请求响应后断开连接，无需等待本次连接的后续请求，</span><br><span class="line">keep-alive告诉Web服务器或者代理服务器，在完成本次请求响应后保持连接，等待本次连接的后续请求。</span><br><span class="line">在响应头中，close连接已关闭。keep-alive保持连接，等待本次连接得到后续请求，如果浏览器请求保持连接，则该头部表明希望Web服务器保持连接的时长（秒），</span><br><span class="line">例如，keep-alive：300.</span><br><span class="line"></span><br><span class="line">11.Content-Encoding: 与请求头的Accept-Encoding对应，指Web服务器表明使用何种压缩方法（gzip，deflate）压缩响应中的对象。</span><br><span class="line">例如，Content-Encoding：gzip。</span><br><span class="line"></span><br><span class="line">12.Content-Language：与请求头中的Accept-Language对应，Web服务器告诉浏览器响应的媒体对象语言。</span><br><span class="line"></span><br><span class="line">13.Content-Length：Web服务器告诉浏览器HTTP请求内容的长度。例如：Content-Length：1024.</span><br><span class="line"></span><br><span class="line">14.Content-Range：Web服务器表明该响应包含的部分对象为整个对象的哪个部分。</span><br><span class="line"></span><br><span class="line">15.Content-Type：与请求头的Accept对应，指明Web服务器告诉浏览器响应的对象的类型。例如，Content-Type：application/xml。</span><br><span class="line"></span><br><span class="line">16.Etag：对象（比如URL）的标志值。一个对象（如HTML文件）如果被修改了，其Etag也会被修改，所以Etag的作用和Last-Modified差不多，主要供Web服务器判断一个对象是否改变。例如前一次请求某个HTML文件时获得了某Etag，当这次又请求该文件时，浏览器就会把先前获得的Etag值发送给Web服务器，然后Web服务器会将这个Etag值跟该文件当前的Etag值进行对比，判断文件是否改变。</span><br><span class="line"></span><br><span class="line">17.Expires：Web服务器表明该实体将在什么时候过期，对于过期的对象，只有在跟Web服务器验证了其有效性后，才能用来响应客户请求，是HTTP/1.0的头部。例如，Expires：Sat，23May 2009 10:02:12 GMT。</span><br><span class="line"></span><br><span class="line">18.Host：客户端指定自己访问的Web服务器的域名/IP地址和端口号。例如，Host: www.xxx.com</span><br><span class="line"></span><br><span class="line">19.If-None-Match: 如果上次文件返回头中包含Etag信息，则会带上If-None-Match发送请求给服务器，判断请求返回304还是200.</span><br><span class="line">例如，If-None-Match: W/&quot;34b1f344ascc:d23&quot;</span><br><span class="line"></span><br><span class="line">20.If-Modified-Since: 如果上次文件返回头中包含了Last-Modified信息，则会带上If-Modified-Since发送请求给服务器，</span><br><span class="line">判断请求是返回304还是200.例如：If-Modified-Since：Thu，10Apr21609:12：23 GMT&quot;</span><br><span class="line"></span><br><span class="line">21.If-Range: 浏览器告诉Web服务器，如果请求的对象没有改变，就把修改的部分返回给浏览器，如果对象改变了，就把整个对象返回给浏览器。</span><br><span class="line">浏览器通过发送请求对象的Etag或者自己所知道的最后修改时间给Web服务器，让其判断对象是否改变。If-Range常常跟Range头部一起使用</span><br><span class="line"></span><br><span class="line">22.Last-Modified：Web服务器设置的对象最后修改时间，比如文件的最后修改时间或者动态页面的最后产生时间。</span><br><span class="line">例如：Last-Modified：Tue，06 Sep 2019 02:34:23 GMT</span><br><span class="line"></span><br><span class="line">23.Location：Web服务器告诉浏览器，试图访问的对象已经被移到别的位置了，让浏览重定向去读取Location里面返回的内容。</span><br><span class="line"></span><br><span class="line">24.Pramga：主要使用Pramga：no-cache，相当于Cache-Control：no-cache。例如，Pramga： no-cache.</span><br><span class="line"></span><br><span class="line">25.Proxy-Authenticate: 代理服务器响应浏览器，要求其提供代理身份验证信息。</span><br><span class="line">Proxy-Authorization：浏览器响应代理服务器的身份验证请求，提供自己的身份信息。</span><br><span class="line"></span><br><span class="line">26.Range：浏览器告诉Web服务器自己想读取对象的哪部分。</span><br><span class="line"></span><br><span class="line">27.Referer：浏览器像Web服务器表明自己是从哪个网页URL跳转访问当前请求中网址URL的，即跳转到当前页面的来源。</span><br><span class="line">例如：Referer：http://wwww.xxxx.com</span><br><span class="line"></span><br><span class="line">28.User-Agent: 浏览器的代理名称，位于请求头部，通常服务端可以根据这个设置获取到浏览器的种类和版本信息。</span><br><span class="line">例如：Mozilla/5.0 Chrome/75.0</span><br><span class="line"></span><br><span class="line">29.Server: Web服务器通过此头域表明自己是什么软件及版本信息。例如，Server：Apache/2.2.18(Unix)</span><br><span class="line"></span><br><span class="line">30. Transfer-Encoding：Web服务器表明自己对应响应传输消息体做怎样的编码，如是否分块（chunked），Transfer-Encoding：chunked</span><br></pre></td></tr></table></figure>
+
+<h5 id="HTTP2"><a href="#HTTP2" class="headerlink" title="HTTP2"></a>HTTP2</h5><h6 id="对比HTTP1-x的优点"><a href="#对比HTTP1-x的优点" class="headerlink" title="对比HTTP1.x的优点"></a>对比HTTP1.x的优点</h6><p>HTTP2完全采用二进制的格式来传输数据，而非HTTP1.x的默认文本格式。而二进制在网络中传输的基本单位一般为帧（Frame，一个帧可以理解为具有固定格式和长度的二进制数据包），每个镇包含几个固定部分内容；类型Type、长度Length、标记Flags、流标识Stream和Frame payload(帧有效载荷，一帧能携带的内容数据长度)。多个帧的传输在网络中就形成了帧的传输网络流，所以我们也可以理解为HTTP2协议是通过流式传输的，最大限度地节省了传输带宽。相比于HTTP1.x每次请求都会携带大量冗余头信息（例如浏览器cookie信息等），HTTP2就具有很大的优势了</p>
+<p>HTTP2使用TCP多路复用的方式来降低网络请求连接建立和关闭的开销，多个请求可以通过一个TCP连接来完成。HTTP1.1虽然可以通过PipeLine实现并发请求，但是PipeLine是通过串行传输的，多个请求之间的响应可能会被阻塞。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这里明确的说一下TCP连接复用和HTTP1.1中keep-alive连接复用的区别；TCP复用传输是发生在传输层的，而keep-alive控制的文件的连接复用是在应用层的</span><br><span class="line"></span><br><span class="line">keep-alive的连接复用是串行的，即一个文件传输完成后，下一个文件才能复用这个连接，而TCP连接复用是帧的多路复用，即不同文件的传输帧可以在一个TCP连接中一起同时进行流式传输。</span><br></pre></td></tr></table></figure>
+
+<p>HTTP2支持传输流的优先级和流量控制机制。HTTP2中每个文件传输流都有自己的传输优先级，并可以通过服务器来动态改变，服务器会保证优先级高的文件流先传输。例如在浏览器渲染中，服务器端就可以优先传输CSS文件来保证页面的渲染，然后在CSS文件全部传输完成后加载js脚本文件。其实这就和我们现在前端的一些优化规则有点相背离，例如使用HTTP2的情况下CSS文件就不一定要写在HTML的顶部，js也不一定要在HTML最底部写了，因为HTTP2的服务器自动就能帮你做好这件事了。</p>
+<p>支持服务端推送。服务端能够在特定条件下把资源主动推送给客户端。就像浏览器端的资源预加载一样，例如资源推送可以在HTML文档下载之前让HTML的jshuoCSS文件预先进行下载，从而大大缩短页面加载渲染的等待时间。</p>
+<p>所以基于这些HTTP2的优势特性，有人说，以往网站的一些优化规则将不再适用，其实两者也不完全是矛盾的。一方面，适用HTTP2会极大程度上提高网络的传输效率，让我们可以更少的关注页面的性能优化，是对现在开发优化手段的一个增强。另一个方面，现有的优化规则依然能对前端资源的加载和执行起到进一步优化的作用。</p>
+<h5 id="HTTPS协议通信过程"><a href="#HTTPS协议通信过程" class="headerlink" title="HTTPS协议通信过程"></a>HTTPS协议通信过程</h5><p>HTTPS协议是通过加入SSL（Secure Sockets Layer）层来加密HTTP数据进行安全传输额HTTP协议，同时启用默认的443端口进行数据传输。</p>
+<p>HTTPS协议相比较于HTTP协议的请求报文区别不大，HTTPS在请求的头部域字段多了upgrade-insecure-requests，该头部字段指令很关键，他可以用于让页面打开的后续请求自动从HTTP请求升级到HTTPS请求。否则如果使用HTTPS来加载HTML文件，而HTML中加载的是HTTP链接的资源文件，则会产生Mixed Content 类型的错误，并且无法加载资源。所以添加了这个字段，作用就是让浏览器自动升级后面的请求为https请求，同时我们在服务器端响应头域中也要加入<code>header(&quot;Content-Security-Policy:upgrade-insecure-requests&quot;)</code>来返回给浏览器，否则浏览器默认安全类型策略会阻塞内容并提示block-all-mixed-content类型的错误。</p>
+<h4 id="前端实时协议"><a href="#前端实时协议" class="headerlink" title="前端实时协议"></a>前端实时协议</h4><p>在实际的前端应用项目中，除了使用应答模式的HTTP协议进行普通网络资源文件的请求加载外，有时也需要建立浏览器客户端与服务端之间的实时连接进行通信，例如网页实时聊天得到应用场景，这就必须涉及到浏览器端的实时通信协议了。对于那些对实时性要求较高的应用场景，普通的HTTP（S）协议就并不适用。虽然前端可以通过Ajax定时间服务端轮询的方式来持续获取服务端的信息，但是这种方式效率相对较低，目前一般只用来处理浏览器上降级体验的实时场景。包括Ajax的方式在内，目前可用来在前端浏览器上进行实时通信的功能实现方式主要有WebSocket、Poll、Long-poll和DDP协议。</p>
+<h5 id="WebSocket通信机制"><a href="#WebSocket通信机制" class="headerlink" title="WebSocket通信机制"></a>WebSocket通信机制</h5><p>HTTP1.1的协议就已经支持使用Upgrade头域设置进行协议扩展切换，这样就可以实现从HTTP1.1协议切换到其他通信协议进行通信了。一种很典型的实时通信协议便是WebSocket，WebSocket是浏览器端和服务器端建立实时连接的一种通信协议，可以在服务器和浏览器端建立类似Socket方式的消息通信。</p>
+<p>相对于HTTP1.1协议，WebSocket协议的优势是方便服务器和浏览器之间的双向数据实时通信。但我们要明白的是，HTTP2也支持服务端的消息推送，也是可以来适应这一场景的。</p>
+<h5 id="Poll（轮询）和-Long-poll（长轮询）"><a href="#Poll（轮询）和-Long-poll（长轮询）" class="headerlink" title="Poll（轮询）和 Long-poll（长轮询）"></a>Poll（轮询）和 Long-poll（长轮询）</h5><p>尽管HTML5的WebSocket为我们提供了实现前端实时化的方案，提供的API也很完备。但不幸的是，并非所有浏览器都支持WebSocket协议，在桌面或移动端浏览器应用开发时我们仍不能放心的使用它，这时我们就必须回到校友额HTTP协议上考虑采用Poll（轮询）和Long-Poll（长轮询）的方案来应对实时通信的场景了。</p>
+<h6 id="Poll"><a href="#Poll" class="headerlink" title="Poll"></a>Poll</h6><p>Poll方案很容易理解，即浏览器采用定时向服务器发送请求轮询的方法不断发送或拉取信息。浏览器每隔一秒向服务器发送一次请求，在一秒内服务器更新的内容在下一次轮询中将被浏览器拉取返回。所以这种方案相对来说实时性较差，而且没有新消息时依然需要不断轮询，比较消耗系统资源。</p>
+<h6 id="Long-Poll"><a href="#Long-Poll" class="headerlink" title="Long-Poll"></a>Long-Poll</h6><p>HTTP请求可以设置一个较长的Timeout等待时间，这样网络轮询请求就可以维持一段较长的时间后返回结果，这也就是Long-Poll（长轮询）的基本思路。服务器只要在这段长轮询时间内进行响应，请求便会立即返回结果；如果这段时间服务器没有返回，浏览器端将自动响应超时并重新发起一个长轮询请求。相比于Poll，Long-Poll的实现更加节省系统资源，实时性更好，不用持续地定时发送网络请求。Long-poll目前一个很典型的应用场景就是网站通过对应的移动客户端进行扫描二维码登录，即用户使用移动客户端扫描二维码登录网站，成功后桌面浏览器页面自动响应跳转进入一个新的登录后页面。用户打开桌面浏览器页面后会立即发送一个用户登录状态查询的长轮询请求，同时开始使用移动客户端扫描二维码，扫描成功时移动客户端会调用接口改变用户的登陆状态，此时服务器可以不断轮询获取用户登录状态改变通知，一旦检测到用户使用移动客户端扫码登录，就将用户登录状态返回给浏览器的长轮询请求，用户浏览器请求到用户登录状态后完成后面的跳转，前端请求登录状态的轮询就可以使用AJAX来模拟实现。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">function _getQrAuth() &#123;</span><br><span class="line">    const self = this;</span><br><span class="line">    </span><br><span class="line">    //请求查询登录状态</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        url: &apos;/api/v1/user/qrcode/auth&apos;,</span><br><span class="line">        type: &apos;get&apos;,</span><br><span class="line">        dataType: &apos;json&apos;,</span><br><span class="line">        cache: false,</span><br><span class="line">        tiemout: 30 * 1000, //设置30秒超时时间</span><br><span class="line">        success: function(data) &#123;</span><br><span class="line">            //登录成功后自动跳转</span><br><span class="line">            if(data.retcode === 200) &#123;</span><br><span class="line">                window.location.href = &apos;user_info.html?backUrl = &apos; + encodeURIComponent(backUrl);</span><br><span class="line">            &#125;</span><br><span class="line">            error: function(e) &#123;</span><br><span class="line">                console.log(JSON.stringify(e))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">在nodejs服务器对应的处理 程序可以用如下方法来实现登陆状态的循环轮询。</span><br><span class="line"></span><br><span class="line">const qrcodeAuth = function*(req,res) &#123;</span><br><span class="line">    let ctx = this;</span><br><span class="line">    </span><br><span class="line">    let authState = false;</span><br><span class="line">    while(true) &#123;</span><br><span class="line">        //查询用户登录状态，已登录则 返回用户信息，否则返回false</span><br><span class="line">        </span><br><span class="line">        authState = queryAuthState(ctx);</span><br><span class="line">        if(authState) &#123;</span><br><span class="line">            ctx.body = &#123;</span><br><span class="line">                retcode: 200</span><br><span class="line">            &#125;</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ctx.body = &#123;</span><br><span class="line">        retcode: 500,</span><br><span class="line">        msg: &apos;tiem out&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Web应用中客户端和服务端建立实时通信的方式比较多，包括HTML5提供的WebSocket、Flash实现的WebSocket、XMLHttpRequest轮序长连接、XMLRequest Multipart Streaming、script标签的长时间轮询等。当然也还有一些不常用的方式，就不必多说了</span><br></pre></td></tr></table></figure>
+
+<h5 id="前端DDP协议"><a href="#前端DDP协议" class="headerlink" title="前端DDP协议"></a>前端DDP协议</h5><p>DDP是一种新型的客户端与服务端的实时通信协议，由于兼容性的原因，目前使用还不广泛。DDP使用JSON的数据格式在客户端和浏览器之间进行数据传输通信，所以对于前端开发者来说使用非常方便。有名的Meteor Web框架的双向实时数据更新机制底层使用的就是DDP，这种协议模式下客户端可向服务端发起远程过程调用，客户端也可以订阅服务端数据，在服务端数据变化时，服务端会向客户端发起通知，触发浏览器响应的操作。当然我们借助DDP模块也可以创建一个简单的DDP协议的服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 引入DDP模块，创建客户端连接器</span><br><span class="line">const DDPClient = require(&apos;ddp&apos;);</span><br><span class="line">const client = new DDPClient(&#123;</span><br><span class="line">    host: &apos;localhost&apos;,</span><br><span class="line">    port: 3000</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// 监听信息</span><br><span class="line">client.on(&apos;message&apos;. function(data, flags) &#123;</span><br><span class="line">    console.log(&apos;[DDP 消息]：&apos;, data);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// 连接</span><br><span class="line">client.connect(function()&#123;</span><br><span class="line">    //客户端订阅 post</span><br><span class="line">    client.subscribe(&apos;post&apos;, [], function()&#123;</span><br><span class="line">        console.log(&apos;[post 订阅消息]&apos;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">以Meteor为例，在Web浏览器端使用DDP协议仍然存在部分兼容性问题，所以目前DDP仍没有被广泛使用在实际项目中，但我们可以认为它是面向未来的一种前端实时协议，以后极有可能被广泛使用。</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="RESTful数据协议规范"><a href="#RESTful数据协议规范" class="headerlink" title="RESTful数据协议规范"></a>RESTful数据协议规范</h5><p> REST并不是某一种具体的协议，而是定义了一种网络应用软件之间的架构关系并提出了一套与之对应得到网络之间交互调用的规则。与之类似的例如早期的WebSevice，当然WebSevice现在基本都不用了。而在REST形式的软件应用服务（这里讨论的主要是Web应用服务）中，每个资源都有一个与之对应的URI地址，资源本身都是方法调用的目标，方法列表对所有资源都是一样的，而且这些方法都推荐使用HTTP协议的标准方法，例如GET、POST、PUT、DELETE等。如果一个网络应用软件的设计是按照REST定义的，我们就可以认为它使用的交互调用的方法遵循RESTful规范。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/协议/" rel="tag"># 协议</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/27/浏览器组成结构/" rel="next" title="浏览器组成结构">
+                <i class="fa fa-chevron-left"></i> 浏览器组成结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/28/基础前端安全/" rel="prev" title="基础前端安全">
+                基础前端安全 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">几岁老人</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP协议概述（HTTP协议为应答模式协议）"><span class="nav-number">1.</span> <span class="nav-text">HTTP协议概述（HTTP协议为应答模式协议）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HTTP1-1"><span class="nav-number">1.1.</span> <span class="nav-text">HTTP1.1</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#长连接"><span class="nav-number">1.1.1.</span> <span class="nav-text">长连接</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#协议扩展切换"><span class="nav-number">1.1.2.</span> <span class="nav-text">协议扩展切换</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#缓存控制"><span class="nav-number">1.1.3.</span> <span class="nav-text">缓存控制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#部分内容传输优化"><span class="nav-number">1.1.4.</span> <span class="nav-text">部分内容传输优化</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HTTP2"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP2</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对比HTTP1-x的优点"><span class="nav-number">1.2.1.</span> <span class="nav-text">对比HTTP1.x的优点</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#HTTPS协议通信过程"><span class="nav-number">1.3.</span> <span class="nav-text">HTTPS协议通信过程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#前端实时协议"><span class="nav-number">2.</span> <span class="nav-text">前端实时协议</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#WebSocket通信机制"><span class="nav-number">2.1.</span> <span class="nav-text">WebSocket通信机制</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Poll（轮询）和-Long-poll（长轮询）"><span class="nav-number">2.2.</span> <span class="nav-text">Poll（轮询）和 Long-poll（长轮询）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Poll"><span class="nav-number">2.2.1.</span> <span class="nav-text">Poll</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Long-Poll"><span class="nav-number">2.2.2.</span> <span class="nav-text">Long-Poll</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#前端DDP协议"><span class="nav-number">2.3.</span> <span class="nav-text">前端DDP协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#RESTful数据协议规范"><span class="nav-number">2.4.</span> <span class="nav-text">RESTful数据协议规范</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">几岁老人</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by"><a href="https://github.com/infinityboy" class="theme-link" rel="noopener" target="_blank">GitHub</a></div>
+
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<span id="busuanzi_container_site_pv" style="margin-left:10px;">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
